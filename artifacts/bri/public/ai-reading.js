@@ -1,13 +1,10 @@
 /*
  * AI Reading Handler
- * Communicates with the local Tarot AI Flask server (tarot_api_server.py)
- * to generate readings from the fine-tuned Qwen2.5 LoRA model.
+ * Sends the current spread to the Express API server (/api/reading),
+ * which calls Claude Haiku via NaraRouter and returns a psychoanalytical reading.
  *
- * Start the server with:  python tarot_api_server.py
+ * API_BASE is defined in spread.html as '/api'.
  */
-
-// API_BASE is defined in card-descriptions.js
-// const API_BASE = 'http://localhost:5001';
 
 /**
  * Generate AI reading based on current spread and user query.
@@ -36,7 +33,7 @@ function generateAIReading() {
         return;
     }
 
-    // Map positions → the shape the Flask /reading endpoint expects:
+    // Map positions → the shape the /api/reading endpoint expects:
     // { name, position, meaning }
     const cardsData = spread.positions.map(pos => ({
         name:     `${pos.card.suit} - ${pos.card.value}`,
@@ -86,13 +83,13 @@ async function sendReadingRequest(userQuery, cardsData, readingLoading, readingO
         console.error('Error generating reading:', error);
         readingLoading.style.display = 'none';
         readingText.textContent =
-            `Error: ${error.message}\n\nMake sure the server is running:\n  python tarot_api_server.py`;
+            `Error: ${error.message}\n\nPlease try again in a moment.`;
         readingOutput.style.display = 'block';
     }
 }
 
 /**
- * Check if the Flask server is reachable and the model is loaded.
+ * Check if the API server is reachable and the model is configured.
  */
 async function checkAPIHealth() {
     try {
@@ -104,14 +101,14 @@ async function checkAPIHealth() {
     }
 }
 
-// Show a warning banner if the server is not available on page load
+// Show a warning banner if the API server is not available on page load
 document.addEventListener('DOMContentLoaded', async () => {
     const healthy = await checkAPIHealth();
     if (!healthy) {
         const banner = document.createElement('div');
         banner.className = 'api-warning';
         banner.textContent =
-            '⚠️ Local AI server not detected. Start it with: python tarot_api_server.py';
+            '⚠️ AI reading service is unavailable. Card spreads still work normally.';
         document.body.insertBefore(banner, document.body.firstChild);
     }
 });

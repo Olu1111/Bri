@@ -4,7 +4,7 @@ import OpenAI from "openai";
 const router = Router();
 
 const NARA_BASE_URL = "https://router.bynara.id/v1";
-const MODEL = "claude-haiku";
+const MODEL = "claude-haiku-4.5";
 
 const SYSTEM_PROMPT =
   "You are a thoughtful, grounded tarot reader with psychoanalytical insight. " +
@@ -17,20 +17,20 @@ const SYSTEM_PROMPT =
   "Be specific, insightful, and helpful.";
 
 function getClient(): OpenAI {
-  if (!process.env.NARA_API_KEY) {
-    throw new Error("NARA_API_KEY is not set");
+  if (!process.env.NARAYA_API_KEY) {
+    throw new Error("NARAYA_API_KEY is not set");
   }
   return new OpenAI({
-    apiKey: process.env.NARA_API_KEY,
+    apiKey: process.env.NARAYA_API_KEY,
     baseURL: NARA_BASE_URL,
   });
 }
 
 router.get("/health", (_req, res) => {
   res.json({
-    status: process.env.NARA_API_KEY ? "ok" : "missing_key",
+    status: process.env.NARAYA_API_KEY ? "ok" : "missing_key",
     device: "api",
-    model_loaded: Boolean(process.env.NARA_API_KEY),
+    model_loaded: Boolean(process.env.NARAYA_API_KEY),
     base_model: MODEL,
   });
 });

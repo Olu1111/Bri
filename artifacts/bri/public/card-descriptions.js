@@ -1,11 +1,13 @@
 /**
  * Card Description Handler
  * Fetches AI-generated one-sentence interpretations for each card
- * based on its position and spread type
+ * based on its position and spread type.
+ *
+ * Calls /api/card-description on the Express API server,
+ * which uses Claude Haiku via NaraRouter.
+ * API_BASE is defined in spread.html as '/api'.
  */
 
-// API_BASE is defined in spread.html
-// const API_BASE = 'http://localhost:5001';
 const cardDescriptions = {};
 
 /**
