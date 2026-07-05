@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Reading</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="index.html" class="back-link">← Back to Spreads</a>
+            <h1 class="title" id="spreadTitle">Loading...</h1>
+            <p class="subtitle" id="spreadSubtitle"></p>
+        </header>
+
+        <main class="spread-layout" id="spreadLayout">
+            <!-- Spread cards will be inserted here by JavaScript -->
+        </main>
+
+        <section class="cards-list-section">
+            <h2 class="cards-list-title">Your Cards</h2>
+            <div class="cards-list" id="cardsList">
+                <!-- Card details will be inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- AI Reading Section -->
+        <section class="ai-reading-section">
+            <h2 class="ai-reading-title">Get AI Reading Interpretation</h2>
+            <div class="query-input-container">
+                <textarea 
+                    id="userQuery" 
+                    class="query-input" 
+                    placeholder="Ask a question or describe your situation (optional - we'll provide a general reading if left blank)..."
+                    rows="3"></textarea>
+                <button class="generate-reading-btn" onclick="if(typeof generateAIReading === 'function') generateAIReading(); else alert('AI Reading not loaded. Please refresh the page.');">Generate Reading</button>
+            </div>
+            <div id="readingOutput" class="reading-output" style="display:none;">
+                <h3>AI Reading:</h3>
+                <p id="readingText" class="reading-text"></p>
+            </div>
+            <div id="readingLoading" class="reading-loading" style="display:none;">
+                <p>Generating your personalized reading...</p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <button class="new-reading-btn" onclick="location.href='index.html'">New Reading</button>
+        </footer>
+
+        <!-- Credits Section -->
+        <section class="credits-section">
+            <div class="credits-container">
+                <h3 class="credits-title">🎨 Deck Credit</h3>
+                <p class="credits-text">
+                    This app features the <strong>Diary of a Broken Soul</strong> tarot deck, 
+                    forged by esoteric artist <strong>Ash Abdullah</strong>. Published in 2009, 
+                    the deck was illustrated using ink, charcoal, and white highlights, creating 
+                    a unique blend of esoteric and occult symbolism.
+                </p>
+                <p class="credits-text">
+                    Learn more about the deck and explore its symbolism at:
+                    <a href="https://diaryofabrokensoul.com" target="_blank" class="credits-link">
+                        DiaryofaBrokenSoul.com
+                    </a>
+                </p>
+                <p class="credits-text credits-subtext">
+                    Readings powered by AI with psychoanalytical insights
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Card Detail Modal -->
+    <div class="card-modal" id="cardModal">
+        <div class="card-modal-content">
+            <button class="card-modal-close" onclick="closeCardModal()">&times;</button>
+            <div class="card-modal-image-container">
+                <img id="cardModalImage" src="" alt="">
+            </div>
+            <h2 class="card-modal-name" id="cardModalName"></h2>
+        </div>
+    </div>
+
+    <!-- API Base URL - routes through the shared reverse proxy -->
+    <script>
+        const API_BASE = '/api';
+    </script>
+
+    <script src="tarotSpreads.js?v=2"></script>
+    <script src="card-descriptions.js?v=2"></script>
+    <script src="spread-display.js?v=2"></script>
+    <script src="ai-reading.js?v=2"></script>
+</body>
+</html>

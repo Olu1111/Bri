@@ -1,0 +1,172 @@
+import { Router } from "express";
+import OpenAI from "openai";
+
+const router = Router();
+
+const NARA_BASE_URL = "https://router.bynara.id/v1";
+const MODEL = "claude-haiku";
+
+const SYSTEM_PROMPT =
+  "You are a thoughtful, grounded tarot reader with psychoanalytical insight. " +
+  "Your style is down-to-earth and practical, not mystical or overly spiritual. " +
+  "You are psychoanalytically informed, drawing on depth psychology and symbolism. " +
+  "You are direct and clear, avoiding vagueness or empty platitudes. " +
+  "You focus on personal insight and self-understanding, and are honest about " +
+  "uncertainty while offering genuine perspective. " +
+  "Provide readings that illuminate the psychological dimensions of a situation. " +
+  "Be specific, insightful, and helpful.";
+
+function getClient(): OpenAI {
+  if (!process.env.NARA_API_KEY) {
+    throw new Error("NARA_API_KEY is not set");
+  }
+  return new OpenAI({
+    apiKey: process.env.NARA_API_KEY,
+    baseURL: NARA_BASE_URL,
+  });
+}
+
+router.get("/health", (_req, res) => {
+  res.json({
+    status: process.env.NARA_API_KEY ? "ok" : "missing_key",
+    device: "api",
+    model_loaded: Boolean(process.env.NARA_API_KEY),
+    base_model: MODEL,
+  });
+});
+
+router.post("/reading", async (req, res) => {
+  const { query, cards } = req.body as {
+    query?: string;
+    cards?: Array<{ name: string; position: string; meaning?: string }>;
+  };
+
+  if (!query || !cards?.length) {
+    res.status(400).json({ error: "Missing query or cards" });
+    return;
+  }
+
+  const cardsText = cards
+    .map(
+      (c) =>
+        `- ${c.position}: ${c.name}${c.meaning ? ` (${c.meaning})` : ""}`,
+    )
+    .join("\n");
+
+  const userContent =
+    `User Question: ${query}\n\nCards in Spread:\n${cardsText}\n\n` +
+    "Please provide a psychoanalytical tarot reading.";
+
+  try {
+    const client = getClient();
+    const completion = await client.chat.completions.create({
+      model: MODEL,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userContent },
+      ],
+      max_tokens: 600,
+      temperature: 0.7,
+    });
+
+    const reading = completion.choices[0]?.message?.content?.trim() ?? "";
+    res.json({ success: true, reading, query, cards_count: cards.length });
+  } catch (err: unknown) {
+    req.log.error({ err }, "Error generating reading");
+    const message = err instanceof Error ? err.message : "Error generating reading";
+    res.status(500).json({ error: message });
+  }
+});
+
+router.post("/quick-read", async (req, res) => {
+  const { card: cardName, query = "What guidance do the cards offer?" } =
+    req.body as { card?: string; query?: string };
+
+  if (!cardName) {
+    res.status(400).json({ error: "No card provided" });
+    return;
+  }
+
+  const userContent =
+    `Card: ${cardName}\nQuestion: ${query}\n\n` +
+    "Provide a brief psychoanalytical interpretation for this single card.";
+
+  try {
+    const client = getClient();
+    const completion = await client.chat.completions.create({
+      model: MODEL,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userContent },
+      ],
+      max_tokens: 200,
+      temperature: 0.7,
+    });
+
+    const reading = completion.choices[0]?.message?.content?.trim() ?? "";
+    res.json({ success: true, reading, card: cardName, query });
+  } catch (err: unknown) {
+    req.log.error({ err }, "Error generating quick read");
+    const message = err instanceof Error ? err.message : "Error generating quick read";
+    res.status(500).json({ error: message });
+  }
+});
+
+router.post("/card-description", async (req, res) => {
+  const {
+    card: cardName,
+    position,
+    spread_type: spreadType,
+    position_meaning: positionMeaning,
+  } = req.body as {
+    card?: string;
+    position?: string;
+    spread_type?: string;
+    position_meaning?: string;
+  };
+
+  if (!cardName) {
+    res.status(400).json({ error: "No card provided" });
+    return;
+  }
+
+  const userContent =
+    `In a ${spreadType ?? "tarot"} spread, the ${cardName} appears in the ` +
+    `${position ?? "focus"} position (${positionMeaning ?? ""}). ` +
+    "Provide a single, concise sentence describing what this card means in this context. " +
+    "Be direct, practical, and grounded.";
+
+  try {
+    const client = getClient();
+    const completion = await client.chat.completions.create({
+      model: MODEL,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a grounded tarot interpreter. Provide brief, practical insights.",
+        },
+        { role: "user", content: userContent },
+      ],
+      max_tokens: 80,
+      temperature: 0.7,
+    });
+
+    let description = completion.choices[0]?.message?.content?.trim() ?? "";
+    const dotIdx = description.indexOf(".");
+    if (dotIdx !== -1) description = description.slice(0, dotIdx + 1);
+
+    res.json({
+      success: true,
+      description,
+      card: cardName,
+      position: position ?? "",
+    });
+  } catch (err: unknown) {
+    req.log.error({ err }, "Error generating card description");
+    const message = err instanceof Error ? err.message : "Error generating card description";
+    res.status(500).json({ error: message });
+  }
+});
+
+export default router;

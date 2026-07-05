@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Spreads - Select Your Reading</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Tarot Spreads</h1>
+            <p class="subtitle">Choose a spread to begin your reading</p>
+        </header>
+
+        <main class="spreads-grid">
+            <!-- One Card Spread -->
+            <div class="spread-card" onclick="selectSpread('one')">
+                <div class="spread-icon">I</div>
+                <h2 class="spread-name">One Card</h2>
+                <p class="spread-description">Pull one card randomly from the deck for immediate guidance and clarity.</p>
+                <div class="card-count">1 Card</div>
+            </div>
+
+            <!-- Three Card Spread -->
+            <div class="spread-card" onclick="selectSpread('three')">
+                <div class="spread-icon">III</div>
+                <h2 class="spread-name">Three Card</h2>
+                <p class="spread-description">Mind, Body, Spirit - explore your holistic being across three dimensions.</p>
+                <div class="card-count">3 Cards</div>
+            </div>
+
+            <!-- Five Card Spread -->
+            <div class="spread-card" onclick="selectSpread('five')">
+                <div class="spread-icon">V</div>
+                <h2 class="spread-name">Five Card</h2>
+                <p class="spread-description">Navigate challenges and find solutions through the path of transformation.</p>
+                <div class="card-count">5 Cards</div>
+            </div>
+
+            <!-- Celtic Cross Spread -->
+            <div class="spread-card" onclick="selectSpread('celtic')">
+                <div class="spread-icon">✦</div>
+                <h2 class="spread-name">Celtic Cross</h2>
+                <p class="spread-description">The most comprehensive spread - explore all dimensions of your situation.</p>
+                <div class="card-count">10 Cards</div>
+            </div>
+
+            <!-- Compatibility Spread -->
+            <div class="spread-card" onclick="selectSpread('compatibility')">
+                <div class="spread-icon">♡</div>
+                <h2 class="spread-name">Compatibility</h2>
+                <p class="spread-description">Understand the dynamics and connection between two people.</p>
+                <div class="card-count">7 Cards</div>
+            </div>
+
+            <!-- Horseshoe Spread -->
+            <div class="spread-card" onclick="selectSpread('horseshoe')">
+                <div class="spread-icon">⌒</div>
+                <h2 class="spread-name">Horseshoe</h2>
+                <p class="spread-description">A protective arc revealing past, present, future, and the answer to your question.</p>
+                <div class="card-count">7 Cards</div>
+            </div>
+
+            <!-- Astrological Spread -->
+            <div class="spread-card" onclick="selectSpread('astrological')">
+                <div class="spread-icon">☉</div>
+                <h2 class="spread-name">Astrological</h2>
+                <p class="spread-description">Map your energy across the twelve houses of astrology and life domains.</p>
+                <div class="card-count">12 Cards</div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Trust the cards. Trust yourself.</p>
+        </footer>
+
+        <!-- Credits Section -->
+        <section class="credits-section">
+            <div class="credits-container">
+                <h3 class="credits-title">🎨 Deck Credit</h3>
+                <p class="credits-text">
+                    This app features the <strong>Diary of a Broken Soul</strong> tarot deck, 
+                    forged by esoteric artist <strong>Ash Abdullah</strong>. Published in 2009, 
+                    the deck was illustrated using ink, charcoal, and white highlights, creating 
+                    a unique blend of esoteric and occult symbolism.
+                </p>
+                <p class="credits-text">
+                    Learn more about the deck and explore its symbolism at:
+                    <a href="https://diaryofabrokensoul.com" target="_blank" class="credits-link">
+                        DiaryofaBrokenSoul.com
+                    </a>
+                </p>
+                <p class="credits-text credits-subtext">
+                    Readings powered by AI with psychoanalytical insights
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function selectSpread(spreadType) {
+            window.location.href = `spread.html?type=${spreadType}`;
+        }
+    </script>
+</body>
+</html>
