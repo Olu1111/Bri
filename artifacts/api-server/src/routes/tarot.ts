@@ -4,7 +4,7 @@ import OpenAI from "openai";
 const router = Router();
 
 const NARA_BASE_URL = "https://router.bynara.id/v1";
-const MODEL = "claude-haiku-4.5";
+const MODEL = "mistral-large";
 
 const SYSTEM_PROMPT =
   "You are a thoughtful, grounded tarot reader with psychoanalytical insight. " +
