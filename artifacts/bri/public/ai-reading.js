@@ -57,7 +57,7 @@ async function sendReadingRequest(userQuery, cardsData, readingLoading, readingO
         const response = await fetch(`${API_BASE}/reading`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: userQuery, cards: cardsData })
+            body: JSON.stringify({ query: userQuery, cards: cardsData, spread_type: spread.spread })
         });
 
         console.log('Response status:', response.status);

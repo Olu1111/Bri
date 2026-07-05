@@ -37,10 +37,14 @@ router.get("/health", (_req, res) => {
 });
 
 router.post("/reading", async (req, res) => {
-  const { query, cards } = req.body as {
+  const { query, cards, spread_type: spreadType } = req.body as {
     query?: string;
+    spread_type?: string;
     cards?: Array<{ name: string; position: string; meaning?: string }>;
   };
+
+  const isAstrological = spreadType?.toLowerCase().includes("astrological") ?? false;
+  const maxTokens = isAstrological ? 2000 : 1400;
 
   if (!query || !cards?.length) {
     res.status(400).json({ error: "Missing query or cards" });
@@ -66,7 +70,7 @@ router.post("/reading", async (req, res) => {
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userContent },
       ],
-      max_tokens: 1400,
+      max_tokens: maxTokens,
       temperature: 0.7,
     });
 
