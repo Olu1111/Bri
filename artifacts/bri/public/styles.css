@@ -969,10 +969,17 @@ body {
 
 .reading-text {
     color: var(--text-primary);
-    line-height: 1.8;
     font-size: 1em;
-    white-space: pre-wrap;
+}
+
+.reading-text p {
+    line-height: 1.8;
+    margin: 0 0 1em 0;
     word-wrap: break-word;
+}
+
+.reading-text p:last-child {
+    margin-bottom: 0;
 }
 
 .reading-loading {

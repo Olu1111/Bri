@@ -71,7 +71,12 @@ async function sendReadingRequest(userQuery, cardsData, readingLoading, readingO
         console.log('Response data received:', data);
 
         if (data.success) {
-            readingText.textContent      = data.reading;
+            // Render as natural paragraphs — split on blank lines
+            readingText.innerHTML = data.reading
+                .split(/\n\n+/)
+                .filter(p => p.trim())
+                .map(p => `<p>${p.replace(/\n/g, ' ').trim()}</p>`)
+                .join('');
             readingLoading.style.display = 'none';
             readingOutput.style.display  = 'block';
             readingOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
