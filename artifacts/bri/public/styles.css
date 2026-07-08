@@ -695,105 +695,9 @@ body {
         padding-top: 60px;
     }
 
-    /* Three Card: keep horizontal, shrink cards */
-    .spread-layout.three-card {
-        flex-direction: row;
-        gap: 16px;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 20px 10px;
-    }
-
-    .spread-layout.three-card .card {
-        position: relative;
-        width: 100px;
-        height: 150px;
-    }
-
-    /* Five Card: tighter gap, smaller cards */
-    .spread-layout.five-card {
-        gap: 12px;
-        padding: 16px 10px;
-    }
-
-    .spread-layout.five-card .card {
-        width: 90px;
-        height: 135px;
-    }
-
-    /* Celtic Cross: drop absolute positioning, go 2-column grid */
-    .spread-layout.celtic-cross {
-        position: static;
-        height: auto;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 16px;
-        align-items: start;
-    }
-
-    .spread-layout.celtic-cross .card {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        top: auto !important;
-        bottom: auto !important;
-        transform: none !important;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 2 / 3;
-        min-height: 100px;
-    }
-
-    .spread-layout.celtic-cross .card img {
-        position: static;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Horseshoe: drop absolute positioning, go 2-column grid */
-    .spread-layout.horseshoe {
-        position: static;
-        height: auto;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 16px;
-        align-items: start;
-    }
-
-    .spread-layout.horseshoe .card {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        top: auto !important;
-        bottom: auto !important;
-        transform: none !important;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 2 / 3;
-        min-height: 100px;
-    }
-
-    .spread-layout.horseshoe .card img {
-        position: static;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Astrological: drop absolute positioning, go 3-column grid */
-    .spread-layout.astrological {
-        position: static;
-        height: auto;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 10px;
-        padding: 16px;
-        align-items: start;
-    }
-
+    /* Shared reset for all absolute-positioned spread cards on mobile */
+    .spread-layout.celtic-cross .card,
+    .spread-layout.horseshoe .card,
     .spread-layout.astrological .card {
         position: relative !important;
         left: auto !important;
@@ -801,12 +705,11 @@ body {
         top: auto !important;
         bottom: auto !important;
         transform: none !important;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 2 / 3;
-        min-height: 80px;
     }
 
+    /* Shared reset: images in these layouts are static, not absolute */
+    .spread-layout.celtic-cross .card img,
+    .spread-layout.horseshoe .card img,
     .spread-layout.astrological .card img {
         position: static;
         width: 100%;
@@ -814,7 +717,83 @@ body {
         object-fit: cover;
     }
 
-    /* Compatibility: stack pillars vertically */
+    /* Three Card: keep horizontal, fixed card size, centred */
+    .spread-layout.three-card {
+        flex-direction: row;
+        gap: 12px;
+        flex-wrap: nowrap;
+        justify-content: center;
+        padding: 20px 10px;
+    }
+
+    .spread-layout.three-card .card {
+        position: relative;
+        width: 90px;
+        height: 135px;
+        flex-shrink: 0;
+    }
+
+    /* Five Card: wrap to 2 rows, fixed card size */
+    .spread-layout.five-card {
+        gap: 10px;
+        padding: 16px 10px;
+        justify-content: center;
+    }
+
+    .spread-layout.five-card .card {
+        width: 88px;
+        height: 132px;
+    }
+
+    /* Celtic Cross: flex-wrap with explicit card size (avoids width:100% blowout) */
+    .spread-layout.celtic-cross {
+        position: static;
+        height: auto;
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .spread-layout.celtic-cross .card {
+        width: 88px;
+        height: 132px;
+    }
+
+    /* Horseshoe: same flex-wrap approach */
+    .spread-layout.horseshoe {
+        position: static;
+        height: auto;
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .spread-layout.horseshoe .card {
+        width: 88px;
+        height: 132px;
+    }
+
+    /* Astrological: 4 per row at ~80px each */
+    .spread-layout.astrological {
+        position: static;
+        height: auto;
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .spread-layout.astrological .card {
+        width: 78px;
+        height: 117px;
+    }
+
+    /* Compatibility: stack pillars vertically, cards stay small */
     .spread-layout.compatibility {
         flex-direction: column;
         gap: 20px;
@@ -826,13 +805,13 @@ body {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 12px;
+        gap: 10px;
     }
 
     .spread-layout.compatibility .card {
         position: relative;
-        width: 90px;
-        height: 135px;
+        width: 88px;
+        height: 132px;
     }
 
     .cards-list {
@@ -861,37 +840,54 @@ body {
 
     /* One Card: slightly larger on small screens for readability */
     .spread-layout.one-card .card {
-        width: 130px;
-        height: 195px;
+        width: 120px;
+        height: 180px;
     }
 
-    /* Three Card: still horizontal, tight */
+    /* Three Card: tighter gap, slightly smaller */
     .spread-layout.three-card {
-        gap: 10px;
+        gap: 8px;
     }
 
     .spread-layout.three-card .card {
-        width: 85px;
-        height: 128px;
-    }
-
-    /* Five Card: 2 rows, tighter */
-    .spread-layout.five-card .card {
         width: 80px;
         height: 120px;
     }
 
-    /* Celtic Cross / Horseshoe: stay 2-col but tighter gap */
+    /* Five Card */
+    .spread-layout.five-card .card {
+        width: 76px;
+        height: 114px;
+    }
+
+    /* Celtic Cross / Horseshoe: tighter gap, slightly smaller cards */
     .spread-layout.celtic-cross,
     .spread-layout.horseshoe {
         gap: 8px;
         padding: 10px;
     }
 
-    /* Astrological: stay 3-col, tighter */
+    .spread-layout.celtic-cross .card,
+    .spread-layout.horseshoe .card {
+        width: 78px;
+        height: 117px;
+    }
+
+    /* Astrological: tightest — 4 per row */
     .spread-layout.astrological {
-        gap: 7px;
+        gap: 6px;
         padding: 10px;
+    }
+
+    .spread-layout.astrological .card {
+        width: 70px;
+        height: 105px;
+    }
+
+    /* Compatibility */
+    .spread-layout.compatibility .card {
+        width: 78px;
+        height: 117px;
     }
 
     .card-meaning {
