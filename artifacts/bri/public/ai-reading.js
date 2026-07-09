@@ -45,13 +45,13 @@ function generateAIReading() {
     readingLoading.style.display = 'block';
     readingOutput.style.display  = 'none';
 
-    sendReadingRequest(userQuery, cardsData, readingLoading, readingOutput, readingText);
+    sendReadingRequest(userQuery, cardsData, spread, readingLoading, readingOutput, readingText);
 }
 
 /**
  * Send the reading request to the API (separated for async handling)
  */
-async function sendReadingRequest(userQuery, cardsData, readingLoading, readingOutput, readingText) {
+async function sendReadingRequest(userQuery, cardsData, spread, readingLoading, readingOutput, readingText) {
     try {
         console.log('Sending request to API:', `${API_BASE}/reading`);
         const response = await fetch(`${API_BASE}/reading`, {
